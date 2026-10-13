@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#166534">
+  <meta name="description" content="Shop from local village businesses with VillageOne.">
+  <link rel="manifest" href="manifest.json">
+  <title>VillageOne — Your village, delivered</title>
+  <style>
+    :root{--green:#166534;--green2:#15803d;--mint:#f0fdf4;--ink:#17221b;--muted:#66736a;--line:#e3e9e4;--white:#fff;--orange:#f59e0b}
+    *{box-sizing:border-box} body{margin:0;background:#f7faf7;color:var(--ink);font:15px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+    button,input,select,textarea{font:inherit} button{cursor:pointer}
+    .app{max-width:680px;margin:auto;min-height:100vh;background:#f7faf7;padding-bottom:90px}
+    header{background:var(--green);color:#fff;padding:20px 18px 18px;border-radius:0 0 24px 24px}
+    .brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:22px;letter-spacing:-.5px}
+    .logo{width:40px;height:40px;border-radius:13px;background:#dcfce7;color:var(--green);display:grid;place-items:center;font-size:23px}
+    .tag{font-size:12px;color:#dcfce7;margin-top:1px}
+    .location{margin-top:18px;display:flex;gap:8px;align-items:center;font-size:13px;color:#e8f5e9}
+    .hero{padding:18px 16px 8px}
+    .hero-card{background:#dcfce7;border-radius:20px;padding:18px;display:flex;gap:10px;align-items:center;justify-content:space-between}
+    .hero h1{font-size:23px;line-height:1.15;margin:0 0 8px;letter-spacing:-.7px}
+    .hero p{margin:0;color:#315b3b;font-size:13px;max-width:300px}
+    .hero-emoji{font-size:54px}
+    .search{padding:10px 16px 4px}
+    .search input{width:100%;border:1px solid var(--line);border-radius:14px;padding:13px 14px;background:white;outline-color:var(--green)}
+    .section{padding:16px}
+    .section-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+    .section h2{font-size:18px;margin:0;letter-spacing:-.3px}
+    .small{font-size:12px;color:var(--muted)}
+    .categories{display:flex;gap:9px;overflow:auto;padding:1px 0 6px;scrollbar-width:none}
+    .categories button{border:1px solid var(--line);background:#fff;border-radius:14px;padding:10px 12px;white-space:nowrap;color:#344239}
+    .categories button.active{background:var(--green);color:#fff;border-color:var(--green)}
+    .shops{display:flex;gap:10px;overflow:auto;padding-bottom:4px}
+    .shop{min-width:145px;background:#fff;border:1px solid var(--line);border-radius:16px;padding:12px}
+    .shop-icon{width:42px;height:42px;background:#f0fdf4;border-radius:13px;display:grid;place-items:center;font-size:23px;margin-bottom:9px}
+    .shop strong{display:block;font-size:14px}.shop span{font-size:12px;color:var(--muted)}
+    .products{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
+    .product{background:#fff;border:1px solid var(--line);border-radius:17px;padding:12px;min-width:0}
+    .product-art{height:94px;background:#f0fdf4;border-radius:13px;display:grid;place-items:center;font-size:48px;margin-bottom:10px}
+    .product h3{font-size:14px;margin:0 0 3px}
+    .product .meta{font-size:12px;color:var(--muted);margin-bottom:8px}
+    .product-bottom{display:flex;align-items:center;justify-content:space-between;gap:5px}
+    .price{font-weight:800}
+    .add{border:0;background:var(--green);color:#fff;border-radius:10px;width:35px;height:35px;font-size:22px;line-height:1}
+    .empty{padding:24px 12px;text-align:center;color:var(--muted);background:#fff;border:1px dashed var(--line);border-radius:15px;grid-column:1/-1}
+    .notice{margin:0 16px;padding:12px 13px;border-radius:14px;background:#fff7ed;color:#7c4610;font-size:12px}
+    .bottom{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:680px;background:#fff;border-top:1px solid var(--line);padding:10px 16px calc(10px + env(safe-area-inset-bottom));display:flex;gap:10px;z-index:5}
+    .bottom button{flex:1;border:0;border-radius:13px;padding:13px;background:var(--green);color:#fff;font-weight:750}
+    .bottom button.secondary{background:#f0fdf4;color:var(--green);border:1px solid #bbf7d0}
+    .count{display:inline-grid;place-items:center;background:#fff;color:var(--green);border-radius:99px;min-width:22px;height:22px;font-size:12px;margin-left:5px}
+    .modal-backdrop{display:none;position:fixed;inset:0;background:#10201588;z-index:10;align-items:flex-end;justify-content:center}
+    .modal-backdrop.open{display:flex}
+    .modal{background:#fff;width:100%;max-width:680px;max-height:90vh;overflow:auto;border-radius:22px 22px 0 0;padding:19px 17px calc(20px + env(safe-area-inset-bottom))}
+    .modal-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+    .modal h2{margin:0;font-size:20px}
+    .close{border:0;background:#f1f5f2;border-radius:10px;width:36px;height:36px;font-size:20px}
+    .cart-row{display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--line);padding:11px 0}
+    .cart-emoji{font-size:27px;width:38px;text-align:center}
+    .cart-info{flex:1}.cart-info strong{display:block;font-size:14px}.cart-info small{color:var(--muted)}
+    .qty{display:flex;align-items:center;gap:8px}.qty button{border:1px solid var(--line);background:#f8faf8;border-radius:8px;width:28px;height:28px}
+    .field{margin:12px 0}.field label{display:block;font-weight:650;font-size:13px;margin-bottom:6px}
+    .field input,.field textarea,.field select{width:100%;border:1px solid #d8e0da;border-radius:11px;padding:12px;background:#fff}
+    .totals{display:flex;justify-content:space-between;font-weight:800;padding:15px 0}
+    .primary{width:100%;border:0;border-radius:13px;padding:14px;background:var(--green);color:#fff;font-weight:800}
+    .secondary-wide{width:100%;border:1px solid #bbf7d0;border-radius:13px;padding:12px;background:#f0fdf4;color:var(--green);font-weight:700;margin-top:8px}
+    .footnote{font-size:11px;color:var(--muted);margin-top:12px}
+    .admin-box{border:1px solid var(--line);background:#fff;border-radius:15px;padding:14px;margin-top:12px}
+    .admin-box summary{font-weight:750;cursor:pointer}
+    .admin-box p{font-size:12px;color:var(--muted)}
+    .admin-box button{border:1px solid var(--line);background:#f8faf8;border-radius:9px;padding:8px 10px;margin:3px}
+    @media(min-width:540px){.products{grid-template-columns:repeat(3,minmax(0,1fr))}.product-art{height:105px}.hero h1{font-size:28px}}
+  </style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="brand"><div class="logo">🛍️</div><div>VillageOne<div class="tag">Your village, delivered</div></div></div>
+    <div class="location">📍 <span id="villageLabel">Your village</span> · <button id="changeVillage" style="border:0;background:none;color:#fff;text-decoration:underline;padding:0">Change</button></div>
+  </header>
+  <div class="hero"><div class="hero-card"><div><h1>Local shops.<br>Easy ordering.</h1><p>Shop nearby and send your order directly to the seller.</p></div><div class="hero-emoji">🏡</div></div></div>
+  <div class="search"><input id="search" type="search" placeholder="Search rice, milk, vegetables..." aria-label="Search products"></div>
+  <section class="section"><div class="section-head"><h2>Browse categories</h2></div><div class="categories" id="categories"></div></section>
+  <section class="section" style="padding-top:4px"><div class="section-head"><h2>Local shops</h2><span class="small">Demo listings</span></div><div class="shops" id="shops"></div></section>
+  <section class="section" style="padding-top:4px"><div class="section-head"><h2 id="productHeading">Popular near you</h2><span class="small" id="productCount"></span></div><div class="products" id="products"></div></section>
+  <p class="notice">Demo prices only. Confirm real prices, stock, delivery availability and fees with the seller before accepting orders.</p>
+  <section class="section">
+    <details class="admin-box">
+      <summary>Owner setup (for the app operator)</summary>
+      <p>This prototype sends orders to WhatsApp. Enter your WhatsApp number with country code, digits only (India example: 91XXXXXXXXXX). This is not a secure admin login; do not enter passwords or private data here.</p>
+      <div class="field"><label for="waNumber">Order WhatsApp number</label><input id="waNumber" inputmode="numeric" placeholder="91XXXXXXXXXX"></div>
+      <div class="field"><label for="villageInput">Village / service area name</label><input id="villageInput" placeholder="Your village name"></div>
+      <button id="saveSettings">Save settings on this device</button>
+      <button id="resetDemo">Reset demo settings</button>
+      <p>For a live business, obtain each shop's permission before listing products and use real, confirmed prices. Device settings are stored only in this browser.</p>
+    </details>
+  </section>
+</div>
+<div class="bottom">
+  <button class="secondary" id="viewCart">🛒 Cart <span class="count" id="cartCount">0</span></button>
+  <button id="checkoutButton">Review order</button>
+</div>
+<div class="modal-backdrop" id="cartModal" role="dialog" aria-modal="true" aria-label="Shopping cart">
+  <div class="modal">
+    <div class="modal-top"><h2>Your order</h2><button class="close" id="closeCart" aria-label="Close">×</button></div>
+    <div id="cartItems"></div>
+    <div class="totals"><span>Estimated item total</span><span id="cartTotal">₹0</span></div>
+    <p class="small">Delivery fee, final availability and payment method must be confirmed with the seller. No payment is collected in this demo.</p>
+    <div class="field"><label for="customerName">Your name *</label><input id="customerName" autocomplete="name" placeholder="Name" maxlength="70"></div>
+    <div class="field"><label for="customerPhone">Your phone number *</label><input id="customerPhone" inputmode="tel" autocomplete="tel" placeholder="Phone number" maxlength="20"></div>
+    <div class="field"><label for="customerAddress">Delivery address / landmark *</label><textarea id="customerAddress" rows="2" placeholder="House, street, village, landmark" maxlength="300"></textarea></div>
+    <div class="field"><label for="customerNote">Notes (optional)</label><input id="customerNote" placeholder="Preferred time or instructions" maxlength="200"></div>
+    <button class="primary" id="sendOrder">Send order via WhatsApp</button>
+    <button class="secondary-wide" id="copyOrder">Copy order text instead</button>
+    <p class="footnote">Your details are included only in the order message you choose to send. Avoid collecting unnecessary personal data.</p>
+  </div>
+</div>
+<script>
+const CATEGORIES = ["All","Groceries","Vegetables","Dairy","Snacks","Household"];
+const SHOPS = [
+  {name:"Village Grocery",type:"Groceries & essentials",icon:"🏪"},
+  {name:"Fresh Basket",type:"Vegetables & fruit",icon:"🥬"},
+  {name:"Daily Dairy",type:"Milk & dairy",icon:"🥛"},
+  {name:"Tasty Corner",type:"Snacks & bakery",icon:"🥨"}
+];
+const PRODUCTS = [
+  {id:1,name:"Rice",unit:"1 kg",price:58,cat:"Groceries",emoji:"🍚",shop:"Village Grocery"},
+  {id:2,name:"Toor dal",unit:"500 g",price:72,cat:"Groceries",emoji:"🫘",shop:"Village Grocery"},
+  {id:3,name:"Cooking oil",unit:"1 L",price:145,cat:"Groceries",emoji:"🫗",shop:"Village Grocery"},
+  {id:4,name:"Sugar",unit:"1 kg",price:46,cat:"Groceries",emoji:"🧂",shop:"Village Grocery"},
+  {id:5,name:"Tomatoes",unit:"1 kg",price:35,cat:"Vegetables",emoji:"🍅",shop:"Fresh Basket"},
+  {id:6,name:"Potatoes",unit:"1 kg",price:32,cat:"Vegetables",emoji:"🥔",shop:"Fresh Basket"},
+  {id:7,name:"Onions",unit:"1 kg",price:40,cat:"Vegetables",emoji:"🧅",shop:"Fresh Basket"},
+  {id:8,name:"Bananas",unit:"6 pcs",price:36,cat:"Vegetables",emoji:"🍌",shop:"Fresh Basket"},
+  {id:9,name:"Milk",unit:"500 ml",price:30,cat:"Dairy",emoji:"🥛",shop:"Daily Dairy"},
+  {id:10,name:"Curd",unit:"500 g",price:38,cat:"Dairy",emoji:"🥣",shop:"Daily Dairy"},
+  {id:11,name:"Biscuits",unit:"pack",price:20,cat:"Snacks",emoji:"🍪",shop:"Tasty Corner"},
+  {id:12,name:"Bread",unit:"loaf",price:35,cat:"Snacks",emoji:"🍞",shop:"Tasty Corner"},
+  {id:13,name:"Dish wash bar",unit:"piece",price:25,cat:"Household",emoji:"🧼",shop:"Village Grocery"},
+  {id:14,name:"Bath soap",unit:"piece",price:35,cat:"Household",emoji:"🧴",shop:"Village Grocery"}
+];
+let activeCategory = "All";
+let cart = {};
+let settings = {whatsapp:"", village:"Your village"};
+try {
+  const saved = JSON.parse(localStorage.getItem("villageone-settings") || "{}");
+  settings = {...settings, ...saved};
+} catch(e) {}
+const money = n => "₹" + Number(n).toLocaleString("en-IN");
+const $ = id => document.getElementById(id);
+function saveSettings(){localStorage.setItem("villageone-settings",JSON.stringify(settings));renderHeader();}
+function renderHeader(){$("villageLabel").textContent=settings.village || "Your village";$("waNumber").value=settings.whatsapp||"";$("villageInput").value=settings.village==="Your village"?"":settings.village||"";}
+function renderCategories(){
+  $("categories").innerHTML = CATEGORIES.map(c=>`<button class="${c===activeCategory?'active':''}" data-cat="${c}">${c==="All"?"✨":""} ${c}</button>`).join("");
+  $("categories").querySelectorAll("button").forEach(b=>b.onclick=()=>{activeCategory=b.dataset.cat;renderCategories();renderProducts();});
+}
+function renderShops(){
+  $("shops").innerHTML=SHOPS.map(s=>`<div class="shop"><div class="shop-icon">${s.icon}</div><strong>${s.name}</strong><span>${s.type}</span></div>`).join("");
+}
+function renderProducts(){
+  const q=$("search").value.trim().toLowerCase();
+  const list=PRODUCTS.filter(p=>(activeCategory==="All"||p.cat===activeCategory)&&(!q||(p.name+" "+p.cat+" "+p.shop).toLowerCase().includes(q)));
+  $("productHeading").textContent=activeCategory==="All"?"Popular near you":activeCategory;
+  $("productCount").textContent=list.length+" items";
+  $("products").innerHTML=list.length?list.map(p=>`<article class="product"><div class="product-art">${p.emoji}</div><h3>${p.name}</h3><div class="meta">${p.unit} · ${p.shop}</div><div class="product-bottom"><span class="price">${money(p.price)}</span><button class="add" aria-label="Add ${p.name}" data-add="${p.id}">+</button></div></article>`).join(""):`<div class="empty">No products found. Try another search.</div>`;
+  $("products").querySelectorAll("[data-add]").forEach(b=>b.onclick=()=>{const id=Number(b.dataset.add);cart[id]=(cart[id]||0)+1;renderCartCount();b.textContent="✓";setTimeout(()=>{if(b.isConnected)b.textContent="+"},650);});
+}
+function cartEntries(){return Object.entries(cart).filter(([,qty])=>qty>0).map(([id,qty])=>({product:PRODUCTS.find(p=>p.id===Number(id)),qty})).filter(x=>x.product);}
+function total(){return cartEntries().reduce((s,x)=>s+x.product.price*x.qty,0);}
+function renderCartCount(){$("cartCount").textContent=cartEntries().reduce((s,x)=>s+x.qty,0);}
+function renderCart(){
+ const entries=cartEntries();
+ $("cartItems").innerHTML=entries.length?entries.map(({product:p,qty})=>`<div class="cart-row"><div class="cart-emoji">${p.emoji}</div><div class="cart-info"><strong>${p.name}</strong><small>${money(p.price)} / ${p.unit}</small></div><div class="qty"><button data-dec="${p.id}" aria-label="Decrease ${p.name}">−</button><span>${qty}</span><button data-inc="${p.id}" aria-label="Increase ${p.name}">+</button></div></div>`).join(""):`<div class="empty">Your cart is empty. Add a few items to begin.</div>`;
+ $("cartTotal").textContent=money(total());
+ $("cartItems").querySelectorAll("[data-dec]").forEach(b=>b.onclick=()=>{let id=Number(b.dataset.dec);cart[id]=(cart[id]||0)-1;if(cart[id]<=0)delete cart[id];renderCart();renderCartCount();});
+ $("cartItems").querySelectorAll("[data-inc]").forEach(b=>b.onclick=()=>{let id=Number(b.dataset.inc);cart[id]=(cart[id]||0)+1;renderCart();renderCartCount();});
+}
+function openCart(){renderCart();$("cartModal").classList.add("open");}
+function closeCart(){$("cartModal").classList.remove("open");}
+function orderText(){
+ const entries=cartEntries();
+ const lines=entries.map(({product:p,qty})=>`• ${p.name} (${p.unit}) x ${qty} = ${money(p.price*qty)} — ${p.shop}`);
+ return `VILLAGEONE ORDER\nVillage: ${settings.village||"Not specified"}\n\n${lines.join("\n")}\n\nEstimated item total: ${money(total())}\n\nCustomer: ${$("customerName").value.trim()}\nPhone: ${$("customerPhone").value.trim()}\nAddress: ${$("customerAddress").value.trim()}\nNotes: ${$("customerNote").value.trim()||"None"}\n\nPlease confirm availability, final prices, delivery fee and payment method before accepting.`;
+}
+function validate(){
+ if(!cartEntries().length){alert("Please add at least one item.");return false;}
+ for(const [id,label] of [["customerName","name"],["customerPhone","phone number"],["customerAddress","delivery address"]]){
+  if(!$ (id).value.trim()){alert("Please enter your "+label+".");$(id).focus();return false;}
+ }
+ return true;
+}
+$("search").addEventListener("input",renderProducts);
+$("viewCart").onclick=openCart;$("checkoutButton").onclick=openCart;$("closeCart").onclick=closeCart;
+$("cartModal").addEventListener("click",e=>{if(e.target===$("cartModal"))closeCart();});
+$("changeVillage").onclick=()=>{const v=prompt("Enter your village or service area:",settings.village==="Your village"?"":settings.village);if(v!==null&&v.trim()){settings.village=v.trim().slice(0,80);saveSettings();}};
+$("saveSettings").onclick=()=>{
+ const wa=$("waNumber").value.replace(/\D/g,"");const v=$("villageInput").value.trim();
+ if(wa && (wa.length<10||wa.length>15)){alert("Enter a valid WhatsApp number with country code, digits only.");return;}
+ settings.whatsapp=wa;settings.village=v||"Your village";saveSettings();alert("Settings saved on this device.");
+};
+$("resetDemo").onclick=()=>{if(confirm("Reset village and WhatsApp settings on this device?")){settings={whatsapp:"",village:"Your village"};saveSettings();}};
+$("sendOrder").onclick=()=>{
+ if(!validate())return;
+ if(!settings.whatsapp){alert("First add your order WhatsApp number in Owner setup.");return;}
+ const url="https://wa.me/"+settings.whatsapp+"?text="+encodeURIComponent(orderText());
+ window.open(url,"_blank","noopener,noreferrer");
+};
+$("copyOrder").onclick=async()=>{
+ if(!validate())return;
+ const text=orderText();
+ try{await navigator.clipboard.writeText(text);alert("Order text copied. Paste it into WhatsApp for the shop or coordinator.");}
+ catch(e){prompt("Copy your order text:",text);}
+};
+renderHeader();renderCategories();renderShops();renderProducts();renderCartCount();
+if("serviceWorker" in navigator && location.protocol.startsWith("http")){window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));}
+</script>
+</body>
+</html>
